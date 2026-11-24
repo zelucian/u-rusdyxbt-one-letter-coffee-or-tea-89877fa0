@@ -29,8 +29,13 @@ function assertValidLetter(letter: string): void {
   }
 }
 
-assertValidLetter(LETTER);
+// Write the validated letter to entry.txt. Validation lives here so the
+// file can never be written without passing the gate first.
+function writeEntry(letter: string): void {
+  assertValidLetter(letter);
+  const outDir = process.env.MAKEFUN_OUTPUT_DIR || "/output";
+  mkdirSync(outDir, { recursive: true });
+  writeFileSync(join(outDir, "entry.txt"), letter, "utf8");
+}
 
-const outDir = process.env.MAKEFUN_OUTPUT_DIR || "/output";
-mkdirSync(outDir, { recursive: true });
-writeFileSync(join(outDir, "entry.txt"), LETTER, "utf8");
+writeEntry(LETTER);
